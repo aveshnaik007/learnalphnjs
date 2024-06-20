@@ -2,19 +2,73 @@
 <head>
 <script src="https://unpkg.com/alpinejs" defer></script>
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.2/axios.min.js" integrity="sha512-JSCFHhKDilTRRXe9ak/FJ28dcpOJxzQaCd3Xg8MyF6XFjODhy/YMCM8HW0TFDckNHWUewW+kfvhin43hKtJxAw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
 	<div class="container mx-auto mt-6 max-w-sm">
 		<h1 class="text-5xl mb-4">Hello world</h1>
-		<div x-data="{open: false}">
-			<button x-on:click="open = !open" class="bg-slate-700 text-white px-4 py-2 rounded-xl">
+		<div x-data="{
+			open: false, 
+			name: 'Avesh',
+			search: '',
+			posts: [
+				{title: 'First post'},
+				{title: 'Second post'},
+				{title: '3rd post'}
+			]
+		}">
+			<!-- x-on and x-bind or :<property> -->
+			<button x-on:click="open = !open" x-bind:class="open ? 'bg-blue-800' : 'bg-slate-700'" class="text-white px-4 py-2 rounded-xl">
 				Toggle
 			</button>
-			<div x-show="open">
+			<!-- x-show -->
+			<div x-show="open" x-transition>
 				<p class="bg-gray-200 p-4 my-6 rounded">
 					Lorem ipson dolor sit
 				</p>
 			</div>
+			<!-- x-text -->
+			<div class="my-4">
+				The value of name is <span x-text="name" class="font-bold"></span>
+			</div>
+			
+			<!-- x-effect you can add function to it too -->
+			<div x-effect="console.log(open)"></div>
+			
+			<!-- x-model -->
+			<input x-model="search" class="border p-2 w-full mb-2 mt-6" type="text" placeholder="Type here" />
+			<p>
+				<span class="font-bold">Searching for:</span>
+				<span x-text="search"></span>
+			</p>
+			
+			<!-- x-if -->
+			<template x-if="open">
+				<div class="bg-gray-50 p-2 mt-8">Template based on conditions</div>
+			</template>
+			
+			<!-- x-for  and x-on:click or @click-->
+			<h3 class="text-2xl mt-6 mb-3 font-bold">Posts</h3>
+			<template x-for="post in posts">
+				<div x-text="post.title"></div>
+			</template>
+			<button @click="posts.push({title: 'My namea'})" class="bg-blue-800 text-white px-4 py-2 rounded-lg mt-4">
+				Add Post
+			</button>
+			
+			<!-- x-ref -->
+			<div class="my-6">
+				<div x-ref="naik"></div>
+				<button @click="$refs.naik.innerText = 'Avesh Naik'" class="bg-black text-white p-2 rounded-lg">Click </button>
+			</div>
+			
+			<div class="my-6">
+				<div x-ref="avesh">Hello world</div>
+				<button @click="$refs.avesh.remove()" class="bg-black text-white p-2 rounded-lg">Click </button>
+			</div>
+			
+			<!-- x-html -->
+			<div x-html="(await axios.get('partial.html')).data">...</div>
 		</div>			
 	</div>
 </body>
